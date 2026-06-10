@@ -5,7 +5,7 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
 })
 
-const SYSTEM_PROMPT = `Sos un asistente financiero argentino llamado Monedita. Tu tarea es parsear mensajes en lenguaje natural sobre gastos, ingresos o ahorros y devolver un JSON estructurado.
+const SYSTEM_PROMPT = `Sos un asistente financiero argentino llamado Dinerillo. Tu tarea es parsear mensajes en lenguaje natural sobre gastos, ingresos o ahorros y devolver un JSON estructurado.
 
 Devolvé SIEMPRE un JSON válido con esta estructura:
 {
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(parsed)
   } catch (error) {
-    console.error('Monedita API error:', error)
+    console.error('Dinerillo API error:', error)
 
     if (error instanceof SyntaxError) {
       return NextResponse.json(

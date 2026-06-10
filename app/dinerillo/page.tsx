@@ -23,7 +23,7 @@ interface Message {
   timestamp: Date
 }
 
-export default function MoneditaPage() {
+export default function DinerilloPage() {
   const router = useRouter()
   const { userName, isLoading } = useUser()
   const [messages, setMessages] = useState<Message[]>([])
@@ -45,7 +45,7 @@ export default function MoneditaPage() {
         {
           id: 'welcome',
           role: 'ai',
-          text: `¡Hola ${userName}! 👋 Soy Monedita, tu asistente financiera. Contame qué gastaste o qué ingreso tuviste, y yo lo registro por vos.\n\nPor ejemplo:\n• "gasté 3500 en el super"\n• "cobré el sueldo, 150000"\n• "pagué la factura de luz 8900"`,
+          text: `¡Hola ${userName}! 👋 Soy Dinerillo, tu asistente financiero. Contame qué gastaste o qué ingreso tuviste, y yo lo registro por vos.\n\nPor ejemplo:\n• "gasté 3500 en el super"\n• "cobré el sueldo, 150000"\n• "pagué la factura de luz 8900"`,
           timestamp: new Date(),
         },
       ])
@@ -71,7 +71,7 @@ export default function MoneditaPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/monedita', {
+      const response = await fetch('/api/dinerillo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input.trim() }),
@@ -152,7 +152,7 @@ export default function MoneditaPage() {
       }
       setMessages((prev) => [...prev, successMsg])
     } catch (err) {
-      console.error('Error saving from Monedita:', err)
+      console.error('Error saving from Dinerillo:', err)
       const errMsg: Message = {
         id: Date.now().toString(),
         role: 'ai',
@@ -204,8 +204,8 @@ export default function MoneditaPage() {
             <span className="text-xl">✨</span>
           </div>
           <div>
-            <h1 className="text-white font-bold text-lg leading-tight">Monedita</h1>
-            <p className="text-[#555555] text-xs">Tu asistente financiera con IA</p>
+            <h1 className="text-white font-bold text-lg leading-tight">Dinerillo</h1>
+            <p className="text-[#555555] text-xs">Tu asistente financiero con IA</p>
           </div>
         </div>
       </div>
