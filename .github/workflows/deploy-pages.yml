@@ -1,1 +1,39 @@
-bmFtZTogRGVwbG95IHRvIEdpdEh1YiBQYWdlcwoKb246CiAgcHVzaDoKICAgIGJyYW5jaGVzOiBbbWFpbiwgY2xhdWRlL2V4Y2l0aW5nLWxhbXBvcnQtSzRkYlFdCiAgd29ya2Zsb3dfZGlzcGF0Y2g6CgpwZXJtaXNzaW9uczoKICBjb250ZW50czogcmVhZAogIHBhZ2VzOiB3cml0ZQogIGlkLXRva2VuOiB3cml0ZQoKY29uY3VycmVuY3k6CiAgZ3JvdXA6IHBhZ2VzCiAgY2FuY2VsLWluLXByb2dyZXNzOiB0cnVlCgpqb2JzOgogIGRlcGxveToKICAgIGVudmlyb25tZW50OgogICAgICBuYW1lOiBnaXRodWItcGFnZXMKICAgICAgdXJsOiAke3sgc3RlcHMuZGVwbG95bWVudC5vdXRwdXRzLnBhZ2VfdXJsIH19CiAgICBydW5zLW9uOiB1YnVudHUtbGF0ZXN0CiAgICBzdGVwczoKICAgICAgLSBuYW1lOiBDaGVja291dCBsYW5kaW5nIHBhZ2UgVHJhbnNmb3JtQXJ0ZQogICAgICAgIHVzZXM6IGFjdGlvbnMvY2hlY2tvdXRAdjQKICAgICAgICB3aXRoOgogICAgICAgICAgcmVmOiBjbGF1ZGUvZXhjaXRpbmctbGFtcG9ydC1LNGRiUQoKICAgICAgLSBuYW1lOiBTZXR1cCBQYWdlcwogICAgICAgIHVzZXM6IGFjdGlvbnMvY29uZmlndXJlLXBhZ2VzQHY1CgogICAgICAtIG5hbWU6IFVwbG9hZCBhcnRpZmFjdAogICAgICAgIHVzZXM6IGFjdGlvbnMvdXBsb2FkLXBhZ2VzLWFydGlmYWN0QHYzCiAgICAgICAgd2l0aDoKICAgICAgICAgIHBhdGg6ICIuIgoKICAgICAgLSBuYW1lOiBEZXBsb3kgdG8gR2l0SHViIFBhZ2VzCiAgICAgICAgaWQ6IGRlcGxveW1lbnQKICAgICAgICB1c2VzOiBhY3Rpb25zL2RlcGxveS1wYWdlc0B2NAo=
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, claude/exciting-lamport-K4dbQ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout landing page TransformArte
+        uses: actions/checkout@v4
+        with:
+          ref: claude/exciting-lamport-K4dbQ
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
