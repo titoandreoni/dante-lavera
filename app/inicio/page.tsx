@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useUser } from '@/lib/useUser'
 import BottomNav from '@/components/BottomNav'
 import MonthSelector from '@/components/MonthSelector'
+import Link from 'next/link'
 import {
   supabase,
   Movement,
@@ -191,7 +192,7 @@ export default function InicioPage() {
       {/* Ingresos / Gastos cards */}
       <div className="px-4 mb-4 grid grid-cols-2 gap-3">
         {/* Ingresos */}
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4">
+        <Link href="/movimientos?type=ingreso" className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 active:scale-95 transition-transform block">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-full bg-[#00e676]/10 flex items-center justify-center">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00e676" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -203,12 +204,12 @@ export default function InicioPage() {
           </div>
           <p className="text-[#00e676] text-xl font-bold">{formatARS(stats.ingresos)}</p>
           <p className="text-[#555555] text-xs mt-1">
-            {stats.movimientosIngresos} {stats.movimientosIngresos === 1 ? 'movimiento' : 'movimientos'}
+            {stats.movimientosIngresos} {stats.movimientosIngresos === 1 ? 'movimiento' : 'movimientos'} →
           </p>
-        </div>
+        </Link>
 
         {/* Gastos */}
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4">
+        <Link href="/movimientos?type=gasto" className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 active:scale-95 transition-transform block">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-full bg-[#ef4444]/10 flex items-center justify-center">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -220,9 +221,9 @@ export default function InicioPage() {
           </div>
           <p className="text-[#ef4444] text-xl font-bold">{formatARS(stats.gastos)}</p>
           <p className="text-[#555555] text-xs mt-1">
-            {stats.movimientosGastos} {stats.movimientosGastos === 1 ? 'movimiento' : 'movimientos'}
+            {stats.movimientosGastos} {stats.movimientosGastos === 1 ? 'movimiento' : 'movimientos'} →
           </p>
-        </div>
+        </Link>
       </div>
 
       {/* Top categories */}
@@ -261,9 +262,12 @@ export default function InicioPage() {
         <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-white font-semibold text-sm">Últimos movimientos</h3>
-            {loadingData && (
-              <div className="w-4 h-4 border border-[#2a2a2a] border-t-[#00e676] rounded-full animate-spin" />
-            )}
+            <div className="flex items-center gap-2">
+              {loadingData && (
+                <div className="w-4 h-4 border border-[#2a2a2a] border-t-[#00e676] rounded-full animate-spin" />
+              )}
+              <Link href="/movimientos" className="text-[#00e676] text-xs font-medium">Ver todos →</Link>
+            </div>
           </div>
 
           {stats.recentMovements.length === 0 ? (
