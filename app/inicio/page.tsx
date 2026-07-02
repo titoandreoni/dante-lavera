@@ -77,7 +77,6 @@ export default function InicioPage() {
       const movimientosIngresos = movements.filter((m) => m.type === 'ingreso').length
       const movimientosGastos = movements.filter((m) => m.type === 'gasto').length
 
-      // Top categories
       const categoryTotals: Record<string, number> = {}
       movements
         .filter((m) => m.type === 'gasto' && m.category)
@@ -168,21 +167,13 @@ export default function InicioPage() {
         <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 flex items-center justify-between">
           <div>
             <p className="text-[#888888] text-xs mb-1">Saldo del mes</p>
-            <p
-              className={`text-2xl font-bold ${
-                ahorro >= 0 ? 'text-[#00e676]' : 'text-[#ef4444]'
-              }`}
-            >
+            <p className={`text-2xl font-bold ${ahorro >= 0 ? 'text-[#00e676]' : 'text-[#ef4444]'}`}>
               {formatARS(ahorro)}
             </p>
           </div>
           <div className="text-right">
             <p className="text-[#888888] text-xs mb-1">Ahorro</p>
-            <p
-              className={`text-lg font-semibold ${
-                ahorroPercent >= 0 ? 'text-[#00e676]' : 'text-[#ef4444]'
-              }`}
-            >
+            <p className={`text-lg font-semibold ${ahorroPercent >= 0 ? 'text-[#00e676]' : 'text-[#ef4444]'}`}>
               {ahorroPercent}%
             </p>
           </div>
@@ -191,7 +182,6 @@ export default function InicioPage() {
 
       {/* Ingresos / Gastos cards */}
       <div className="px-4 mb-4 grid grid-cols-2 gap-3">
-        {/* Ingresos */}
         <Link href="/movimientos?type=ingreso" className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 active:scale-95 transition-transform block">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-full bg-[#00e676]/10 flex items-center justify-center">
@@ -208,7 +198,6 @@ export default function InicioPage() {
           </p>
         </Link>
 
-        {/* Gastos */}
         <Link href="/movimientos?type=gasto" className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 active:scale-95 transition-transform block">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-full bg-[#ef4444]/10 flex items-center justify-center">
@@ -293,15 +282,9 @@ export default function InicioPage() {
                       </p>
                     </div>
                   </div>
-                  <p
-                    className={`text-sm font-semibold flex-shrink-0 ml-2 ${
-                      mov.type === 'ingreso'
-                        ? 'text-[#00e676]'
-                        : mov.type === 'ahorro'
-                        ? 'text-[#3b82f6]'
-                        : 'text-[#ef4444]'
-                    }`}
-                  >
+                  <p className={`text-sm font-semibold flex-shrink-0 ml-2 ${
+                    mov.type === 'ingreso' ? 'text-[#00e676]' : mov.type === 'ahorro' ? 'text-[#3b82f6]' : 'text-[#ef4444]'
+                  }`}>
                     {mov.type === 'gasto' ? '-' : '+'}{formatARS(mov.amount)}
                   </p>
                 </div>
