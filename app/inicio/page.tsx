@@ -114,6 +114,16 @@ export default function InicioPage() {
     }
   }, [userName, fetchData])
 
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible' && userName) {
+        fetchData()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [userName, fetchData])
+
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
       setCurrentMonth(11)
