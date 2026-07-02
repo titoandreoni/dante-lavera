@@ -80,15 +80,14 @@ export default function RegistrarPage() {
       if (dbError) throw dbError
 
       setSuccess(true)
-      // Reset form
       setAmount('')
       setDescription('')
       setDate(new Date().toISOString().split('T')[0])
       setCategory('otros')
 
       setTimeout(() => {
-        setSuccess(false)
-      }, 2000)
+        router.push('/inicio')
+      }, 1200)
     } catch (err) {
       console.error('Error saving movement:', err)
       setError('Error al guardar. Verificá que Supabase esté configurado.')
