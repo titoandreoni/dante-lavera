@@ -18,6 +18,7 @@ import {
 interface MonthStats {
   ingresos: number
   gastos: number
+  ahorros: number
   movimientosIngresos: number
   movimientosGastos: number
   topCategories: { id: string; total: number; percentage: number }[]
@@ -32,6 +33,7 @@ export default function InicioPage() {
   const [stats, setStats] = useState<MonthStats>({
     ingresos: 0,
     gastos: 0,
+    ahorros: 0,
     movimientosIngresos: 0,
     movimientosGastos: 0,
     topCategories: [],
@@ -74,6 +76,10 @@ export default function InicioPage() {
         .filter((m) => m.type === 'gasto')
         .reduce((sum, m) => sum + m.amount, 0)
 
+      const ahorros = movements
+        .filter((m) => m.type === 'ahorro')
+        .reduce((sum, m) => sum + m.amount, 0)
+
       const movimientosIngresos = movements.filter((m) => m.type === 'ingreso').length
       const movimientosGastos = movements.filter((m) => m.type === 'gasto').length
 
@@ -96,6 +102,7 @@ export default function InicioPage() {
       setStats({
         ingresos,
         gastos,
+        ahorros,
         movimientosIngresos,
         movimientosGastos,
         topCategories,
@@ -142,9 +149,9 @@ export default function InicioPage() {
     }
   }
 
-  const ahorro = stats.ingresos - stats.gastos
+  const saldo = stats.ingresos - stats.gastos - stats.ahorros
   const ahorroPercent =
-    stats.ingresos > 0 ? Math.round((ahorro / stats.ingresos) * 100) : 0
+    stats.ingresos > 0 ? Math.round((stats.ahorros / stats.ingresos) * 100) : 0
 
   if (isLoading) {
     return (
@@ -174,19 +181,27 @@ export default function InicioPage() {
 
       {/* Balance badge */}
       <div className="px-4 mb-4">
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 flex items-center justify-between">
-          <div>
-            <p className="text-[#888888] text-xs mb-1">Saldo del mes</p>
-            <p className={`text-2xl font-bold ${ahorro >= 0 ? 'text-[#00e676]' : 'text-[#ef4444]'}`}>
-              {formatARS(ahorro)}
-            </p>
+        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-[#888888] text-xs mb-1">Disponible</p>
+              <p className={`text-2xl font-bold ${saldo >= 0 ? 'text-[#00e676]' : 'text-[#ef4444]'}`}>
+                {formatARS(saldo)}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-[#888888] text-xs mb-1">Ahorrado</p>
+              <p className="text-lg font-semibold text-[#3b82f6]">
+                {formatARS(stats.ahorros)}
+              </p>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-[#888888] text-xs mb-1">Ahorro</p>
-            <p className={`text-lg font-semibold ${ahorroPercent >= 0 ? 'text-[#00e676]' : 'text-[#ef4444]'}`}>
-              {ahorroPercent}%
-            </p>
-          </div>
+          {stats.ahorros > 0 && (
+            <div className="pt-3 border-t border-[#2a2a2a] flex items-center justify-between">
+              <p className="text-[#555555] text-xs">% ahorrado del ingreso</p>
+              <p className="text-[#3b82f6] text-xs font-semibold">{ahorroPercent}%</p>
+            </div>
+          )}
         </div>
       </div>
 
