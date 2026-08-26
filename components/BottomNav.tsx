@@ -8,7 +8,7 @@ const navItems = [
   { href: '/registrar', label: 'Registrar', icon: PlusIcon },
   { href: '/dinerillo', label: 'Dinerillo', icon: SparklesIcon },
   { href: '/fijos', label: 'Fijos', icon: RepeatIcon },
-  { href: '/cuotas', label: 'Cuotas', icon: CreditCardIcon },
+  { href: '/pendientes', label: 'Pendientes', icon: ListCheckIcon },
 ]
 
 function HomeIcon({ active }: { active: boolean }) {
@@ -53,11 +53,13 @@ function RepeatIcon({ active }: { active: boolean }) {
   )
 }
 
-function CreditCardIcon({ active }: { active: boolean }) {
+function ListCheckIcon({ active }: { active: boolean }) {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="20" height="14" x="2" y="5" rx="2" />
-      <line x1="2" y1="10" x2="22" y2="10" stroke={active ? '#0a0a0a' : 'currentColor'} />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? '2.5' : '2'} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 12H3" />
+      <path d="M16 6H3" />
+      <path d="M16 18H3" />
+      <path d="M19 10l-4 4-2-2" />
     </svg>
   )
 }

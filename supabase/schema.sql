@@ -100,3 +100,25 @@ CREATE POLICY IF NOT EXISTS "Allow all for anon on installments"
 --   ('Pareja', 'ingreso', 130000, NULL, 'Sueldo mayo', '2026-05-01'),
 --   ('Tito', 'gasto', 4200, 'transporte', 'Nafta', '2026-05-08'),
 --   ('Pareja', 'gasto', 2800, 'comida', 'Delivery', '2026-05-10');
+
+-- ============================================
+-- Table: pending_items (Lista de pendientes)
+-- ============================================
+CREATE TABLE IF NOT EXISTS pending_items (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  description text NOT NULL,
+  category text NOT NULL DEFAULT 'hogar' CHECK (
+    category IN ('hogar', 'super', 'farmacia', 'limpieza', 'otros')
+  ),
+  completed boolean DEFAULT false,
+  completed_at timestamptz,
+  added_by text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS pending_items_completed_idx ON pending_items (completed);
+CREATE INDEX IF NOT EXISTS pending_items_created_idx ON pending_items (created_at DESC);
+
+ALTER TABLE pending_items ENABLE ROW LEVEL SECURITY;
+CREATE POLICY IF NOT EXISTS "Allow all for anon on pending_items"
+  ON pending_items FOR ALL TO anon USING (true) WITH CHECK (true);
