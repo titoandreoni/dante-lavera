@@ -150,7 +150,6 @@ function RapidoContent() {
           <input
             type="date"
             value={date}
-            max={todayStr}
             onChange={(e) => setDate(e.target.value)}
             className="bg-transparent text-white text-sm text-right focus:outline-none"
             style={{ colorScheme: 'dark' }}
