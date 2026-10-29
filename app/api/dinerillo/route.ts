@@ -5,7 +5,9 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
 })
 
-const SYSTEM_PROMPT = `Sos un asistente financiero argentino llamado Dinerillo. Tu tarea es parsear mensajes en lenguaje natural sobre gastos, ingresos o ahorros y devolver un JSON estructurado.
+const buildSystemPrompt = (today: string) => `Sos un asistente financiero argentino llamado Dinerillo. Tu tarea es parsear mensajes en lenguaje natural sobre gastos, ingresos o ahorros y devolver un JSON estructurado.
+
+La fecha de hoy es ${today} (formato AAAA-MM-DD).
 
 Devolvé SIEMPRE un JSON válido con esta estructura:
 {
@@ -13,10 +15,18 @@ Devolvé SIEMPRE un JSON válido con esta estructura:
   "amount": number (solo el número, sin símbolos),
   "category": "comida" | "vivienda" | "servicios" | "entretenimiento" | "deudas" | "salud" | "transporte" | "otros" | null,
   "description": string (descripción breve en español),
+  "date": string (fecha en formato AAAA-MM-DD),
   "error": null | "string con el error"
 }
 
-Reglas:
+Reglas de fecha:
+- Si el mensaje incluye una fecha en formato DD-MM-AAAA (ej: "15-10-2026"), convertila a AAAA-MM-DD
+- Si el mensaje incluye una fecha como "el 15", "el 15 de octubre" o similar, resolvela usando el año/mes actual
+- Si dice "ayer", restá 1 día a la fecha de hoy
+- Si dice "el lunes", "el martes", etc., calculá la fecha del día más reciente con ese nombre
+- Si no menciona fecha, usá la fecha de hoy
+
+Reglas de tipo:
 - Si el mensaje menciona pagar, gastar, comprar → type: "gasto"
 - Si el mensaje menciona cobrar, recibir, sueldo, ingreso → type: "ingreso"
 - Si el mensaje menciona ahorrar, guardar → type: "ahorro"
@@ -57,10 +67,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const today = new Date().toISOString().split('T')[0]
+
     const response = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 512,
-      system: SYSTEM_PROMPT,
+      system: buildSystemPrompt(today),
       messages: [
         {
           role: 'user',

@@ -11,6 +11,7 @@ interface ParsedMovement {
   amount: number
   category: string | null
   description: string
+  date: string
   error: string | null
 }
 
@@ -93,9 +94,14 @@ export default function DinerilloPage() {
         const emoji =
           data.type === 'ingreso' ? '💰' : data.type === 'ahorro' ? '🏦' : getCategoryEmoji(data.category || 'otros')
 
+        const dateLabel = data.date
+          ? new Date(data.date + 'T12:00:00').toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })
+          : null
+
         let confirmText = `Entendí:\n${emoji} ${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)}: ${formatARS(data.amount)}`
         if (data.category) confirmText += `\n📁 ${getCategoryLabel(data.category)}`
         if (data.description) confirmText += `\n📝 ${data.description}`
+        if (dateLabel) confirmText += `\n📅 ${dateLabel}`
         confirmText += '\n\n¿Confirmo?'
 
         const aiMessage: Message = {
@@ -133,7 +139,7 @@ export default function DinerilloPage() {
         amount: parsed.amount,
         category: parsed.category,
         description: parsed.description || null,
-        date: new Date().toISOString().split('T')[0],
+        date: parsed.date || new Date().toISOString().split('T')[0],
       }])
 
       if (error) throw error
