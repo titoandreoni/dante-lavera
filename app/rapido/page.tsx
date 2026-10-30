@@ -29,9 +29,11 @@ function RapidoContent() {
   const searchParams = useSearchParams()
   const { userName, isLoading } = useUser()
 
+  const todayStr = new Date().toISOString().split('T')[0]
   const [type, setType] = useState<MovementType>('gasto')
   const [amount, setAmount] = useState('')
   const [category, setCategory] = useState('comida')
+  const [date, setDate] = useState(todayStr)
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
 
@@ -63,7 +65,7 @@ function RapidoContent() {
         amount: parseInt(amount, 10),
         category: type === 'gasto' ? category : null,
         description: null,
-        date: new Date().toISOString().split('T')[0],
+        date,
       }])
       if (error) throw error
       setSuccess(true)
@@ -139,6 +141,20 @@ function RapidoContent() {
             <p className="text-[#00e676] text-sm font-medium">✓ Registrado</p>
           </div>
         )}
+      </div>
+
+      {/* Date selector */}
+      <div className="px-5 mb-3">
+        <label className="flex items-center justify-between bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl px-4 py-3">
+          <span className="text-[#555] text-sm">📅 Fecha</span>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="bg-transparent text-white text-sm text-right focus:outline-none"
+            style={{ colorScheme: 'dark' }}
+          />
+        </label>
       </div>
 
       {/* Category grid (only for gastos) */}
